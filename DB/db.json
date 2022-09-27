@@ -1,0 +1,88 @@
+{
+    "users":[ 
+        {
+            "id": 1,
+            "email": "test@mail.ru",
+            "password": "123sad",
+            "name": "USER-1"
+        },
+        {
+            "id": 2,
+            "email": "test2@mail.ru",
+            "password": "123sad",
+            "name": "USER-2"
+        }
+    ],
+    "auctions":[
+        {
+            "id": "1",
+            "name": "Аукцион №1", 
+            "image": "https://anime-fans.ru/wp-content/uploads/2021/04/Krasivye-kartinki-anime-arty-paren-i-devushka_16.jpg",
+            "timeStart": "26.09.2022 17:48",
+            "timeEnd": "26.09.2022 18:00",
+            "startStavka": "1000",
+            "stepStavka": "50",
+            "history":[
+                {
+                    "idUser": 1,
+                    "time": 1664269297,
+                    "size": 1000
+                },
+                {
+                    "idUser": 2,
+                    "time": 1664274597,
+                    "size": 1050
+                },
+                {
+                    "idUser": 2,
+                    "time": 1664274597,
+                    "size": 1250
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "name": "Аукцион №2", 
+            "image": "https://anime-fans.ru/wp-content/uploads/2021/04/Krasivye-kartinki-anime-arty-paren-i-devushka_16.jpg",
+            "timeStart": "26.09.2022 17:48",
+            "timeEnd": "26.09.2022 18:00",
+            "startStavka": "2000",
+            "stepStavka": "150",
+            
+            "history":[]
+        },
+        {
+            "id": "3",
+            "name": "Аукцион №3", 
+            "image": "https://anime-fans.ru/wp-content/uploads/2021/04/Krasivye-kartinki-anime-arty-paren-i-devushka_16.jpg",
+            "timeStart": "26.09.2022 17:48",
+            "timeEnd": "26.09.2022 18:00",
+            "startStavka": "2000",
+            "stepStavka": "150",
+            
+            "history":[]
+        },
+        {
+            "id": "4",
+            "name": "Аукцион №4", 
+            "image": "https://anime-fans.ru/wp-content/uploads/2021/04/Krasivye-kartinki-anime-arty-paren-i-devushka_16.jpg",
+            "timeStart": "26.09.2022 17:48",
+            "timeEnd": "26.09.2022 18:00",
+            "startStavka": "2000",
+            "stepStavka": "150",
+            
+            "history":[]
+        },
+        {
+            "id": "5",
+            "name": "Аукцион №5", 
+            "image": "https://anime-fans.ru/wp-content/uploads/2021/04/Krasivye-kartinki-anime-arty-paren-i-devushka_16.jpg",
+            "timeStart": "26.09.2022 17:48",
+            "timeEnd": "26.09.2022 18:00",
+            "startStavka": "2000",
+            "stepStavka": "150",
+            
+            "history":[]
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+C:\Users\temp_user\source\repos\auction\auction\obj\Debug\net5.0\auction.csproj.AssemblyReference.cache
+C:\Users\temp_user\source\repos\auction\auction\obj\Debug\net5.0\auction.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\temp_user\source\repos\auction\auction\obj\Debug\net5.0\auction.AssemblyInfoInputs.cache
+C:\Users\temp_user\source\repos\auction\auction\obj\Debug\net5.0\auction.AssemblyInfo.cs
+C:\Users\temp_user\source\repos\auction\auction\obj\Debug\net5.0\auction.csproj.CoreCompileInputs.cache
+C:\Users\temp_user\source\repos\auction\auction\obj\Debug\net5.0\auction.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\temp_user\source\repos\auction\auction\obj\Debug\net5.0\auction.MvcApplicationPartsAssemblyInfo.cache

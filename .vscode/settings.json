@@ -1,0 +1,14 @@
+{
+    "editor.codeActionsOnSave":{"source.fixAll.eslint": true},
+    "eslint.alwaysShowStatus": false,
+    "eslint.format.enable": true,
+    "eslint.workingDirectories": [
+      {"mode": "auto"}
+    ], 
+    "eslint.validate": [
+      "javascript",
+      "vue"
+    ],
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true
+}
