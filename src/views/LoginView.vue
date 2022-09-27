@@ -40,9 +40,9 @@ export default {
   components: {},
   computed: {},
   methods: {
-    ...mapActions(['TRY_LOGIN']),
+    ...mapActions(['userAuth']),
     doLogin: function  () {
-      this.TRY_LOGIN(this)
+      this.userAuth(this)
     }
   },
   mounted() { }

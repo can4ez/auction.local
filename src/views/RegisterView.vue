@@ -50,14 +50,14 @@ export default {
   components: {},
   computed: {},
   methods: {
-    ...mapActions('users', ['TRY_REGISTER']),
+    ...mapActions('users', ['userRegister']),
     doregister: function  () {
 
       if(password2 !== password){
         return;
       }
 
-      this.TRY_register(this)
+      this.userRegister(this)
     }
   },
   mounted() { }

@@ -1,82 +1,134 @@
 import Axios from 'axios'
 import config from '@/../config'
 
+const usersApi = config.apiUrl + '/user';
+
+const userRegisterApi = usersApi + '/register';
+const userAuthApi = usersApi + '/auth';
+const userListApi = usersApi + '/list';
+const userProfileApi = usersApi + 'info/';
+
 const state = {
-    users: null,
-    user: null
+  users: null,
+  user: null
 };
 
 const actions = {
-  
-  GET_ALL_USERS({commit}, data){
-    return Axios.get(config.apiUrl + '/users', {
-      method: "GET"
-    }).then((users) => {
-      commit('SET_ALL', users.data);
-      return users;
-    }).catch((error)=>{
+
+  userRegister({
+    commit
+  }, data) {
+    return Axios(userRegisterApi, {
+      method: "POST",
+      params: {
+        email: data.email, //"hd.anufriev@yandex.ru",
+        password: data.password, //"123456",
+        name: data.name, //"Dmitrii"
+      }
+    }).then((response) => {
+      /* TODO: Какой формат ответа? */
+      if (response.status == 201)
+        return response.data; /* TODO: Тут вроде вернет данные пользователя */
+      else
+        return false; /* TODO: Обработать ошибку регистрации */
+    }).catch((error) => {
       console.log(error);
       return error;
     });
   },
 
-    TRY_LOGIN({commit}, data){
-      return Axios.get(config.apiUrl + '/users/login', {
-        method: "POST",
-        params:{ email: data.email , password: data.password }
-      }).then((user) => {
-        commit('SET_USER', user.data);
-        return user;
-      }).catch((error)=>{
-        console.log(error);
-        return error;
-      });
-    },
-    TRY_REGISTER({commit}, data){
-      console.log(data.email, data.password);
-      return Axios.get(config.apiUrl + '/users/login', {
-        method: "POST",
-        params:{ email: data.email , password: data.password }
-      }).then((user) => {
-        return user;
-      }).catch((error)=>{
-        console.log(error);
-        return error;
-      });
-    }
+  userAuth({
+    commit
+  }, data) {
+    return Axios(userAuthApi, {
+      method: "POST",
+      params: {
+        email: data.email, //"hd.anufriev@yandex.ru",
+        password: data.password, //"123456",
+      }
+    }).then((response) => {
+      if (response.status == 200)
+        return true;
+      else // if (response.status == 204)
+        return false; /* TODO: Обработать ошибку регистрации */
+    }).catch((error) => {
+      console.log(error);
+      return error;
+    });
+  },
+
+  userList({
+    commit
+  }, data) {
+    return Axios(userListApi, {
+      method: "GET"
+    }).then((response) => {
+
+      if (response.status == 200) {
+        /* TODO: Вернет список пользователей */
+        commit('SET_ALL', response.data);
+        return true;
+      } else {
+        return false;
+      }
+
+    }).catch((error) => {
+      console.log(error);
+      return error;
+    });
+  },
+
+  /* TODO: Какой формат запроса? */
+  userProfile({
+    commit
+  }, data) {
+    return Axios(userProfileApi + data.id, {
+      method: "GET"
+    }).then((response) => {
+      if (response.status == 200) {
+        /* TODO: Вернет объект пользователя */
+        return response.data;
+      } else {
+        return false;
+      }
+    }).catch((error) => {
+      console.log(error);
+      return error;
+    });
+  },
 
 };
 
 const mutations = {
-  SET_USER(state, user){
+  SET_USER(state, user) {
     state.user = user;
   },
-  SET_ALL(state, users){
+  SET_ALL(state, users) {
     state.users = users;
   },
 };
 
 const getters = {
-  USER(state){
+  USER(state) {
     return state.user ?? {};
   },
   USER_BY_ID: (state) => (id) => {
-    if(state.users == null){
+    if (state.users == null) {
       return {};
     }
 
-    return state.users.find((usr)=>{ 
-      if(usr.id == id)
+    return state.users.find((usr) => {
+      if (usr.id == id)
         return usr;
-     });
+    });
   }
 }
 
 
 export const users = {
-    namespaced: true,
-    state,
-    actions,
-    mutations,
-    getters
+  namespaced: true,
+  state,
+  actions,
+  mutations,
+  getters
 };

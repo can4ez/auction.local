@@ -101,7 +101,7 @@ export default {
     ...mapGetters('users', [
       'USER_BY_ID', 'USER'
     ]),
-    ...mapActions('auctions',['ADD_STAVKA']),
+    ...mapActions('auctions',['auctionStavka']),
 
     submitStavka: function (stavka){
       this.stavka = stavka;
@@ -111,7 +111,7 @@ export default {
         return;
       }
 
-      this.ADD_STAVKA({
+      this.auctionStavka({
         auctionId: this.$route.query.id,
         idUser: this.USER.id ?? 1,
         time: 0,

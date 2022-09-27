@@ -20,20 +20,20 @@ export default {
   },
   methods: {
     ...mapActions('auctions',[
-      'GET_AUCTIONS_FROM_API'
+      'auctionList'
     ]),
     ...mapActions('users',[
-      'GET_ALL_USERS'
+      'userList'
     ]),
   },
   mounted(){
-    this.GET_AUCTIONS_FROM_API()
-    this.GET_ALL_USERS()
+    this.auctionList()
+    this.userList()
 
     // Обновление списка аукционов каждые 3 секунды
     setInterval(function(){
-      this.GET_AUCTIONS_FROM_API()
-      this.GET_ALL_USERS()
+      this.auctionList()
+      this.userList()
     }.bind(this), 3000);
   },
   strict: true

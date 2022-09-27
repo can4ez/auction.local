@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     ...mapActions('auctions',[
-      'GET_AUCTIONS_FROM_API'
+      'auctionList'
     ]),
     openAuction: function (auc) {
       this.$router.push({ name: 'auction' , query:{ id:auc.id} })
