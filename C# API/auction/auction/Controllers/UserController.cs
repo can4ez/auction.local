@@ -1,12 +1,14 @@
 using System;
 using System.Linq;
 using auction.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static auction.Models.UserDBModel;
 
 namespace auction.Controllers
 {
+    [EnableCors()]
     [Route("api/user")]
     [ApiController]
     public class UserController : Controller

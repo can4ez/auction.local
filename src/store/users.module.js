@@ -18,9 +18,13 @@ const actions = {
   userRegister({
     commit
   }, data) {
-    return Axios(userRegisterApi, {
-      method: "POST",
-      params: {
+    return Axios({
+      url: userRegisterApi,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
         email: data.email, //"hd.anufriev@yandex.ru",
         password: data.password, //"123456",
         name: data.name, //"Dmitrii"
@@ -38,19 +42,28 @@ const actions = {
   },
 
   userAuth({
-    commit
+    commit,
+    state
   }, data) {
-    return Axios(userAuthApi, {
-      method: "POST",
-      params: {
+    return Axios({
+      url: userAuthApi,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
         email: data.email, //"hd.anufriev@yandex.ru",
         password: data.password, //"123456",
       }
     }).then((response) => {
-      if (response.status == 200)
+      if (response.status == 200) {
+        commit('SET_USER', state.users.find((e) => {
+          return e.email == data.email;
+        }));
         return true;
-      else // if (response.status == 204)
+      } else if (response.status == 204) {
         return false; /* TODO: Обработать ошибку регистрации */
+      }
     }).catch((error) => {
       console.log(error);
       return error;
@@ -96,6 +109,10 @@ const actions = {
       return error;
     });
   },
+
+  logOut({commit, state}){
+    state.user = null;
+  }
 
 };
 

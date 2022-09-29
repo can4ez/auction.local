@@ -33,8 +33,14 @@ export default {
     // Обновление списка аукционов каждые 3 секунды
     setInterval(function(){
       this.auctionList()
-      this.userList()
     }.bind(this), 3000);
+
+    // Обновление списка аукционов каждые 3 секунды
+    setInterval(function(){
+      this.userList()
+    }.bind(this), 4000);
+
+      
   },
   strict: true
 }

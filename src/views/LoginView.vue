@@ -2,6 +2,17 @@
   <div class='loginView'>
             <div class="box">
               <!-- <form> -->
+
+                <div class="field" v-if="this.errors == true">
+                  <article class="message is-danger">
+                    <div class="message-header">
+                      <p>Неверный логин или Пароль</p>
+                      <button class="delete" aria-label="delete" 
+                      v-on:click="this.errors = false"></button>
+                    </div>
+                  </article>
+                </div>
+
                 <div class="field">
                   <div class="control">
                     <input 
@@ -34,15 +45,26 @@
 export default {
   data() {
     return {
-      email: "test@mail.ru" , password: "pwd"
+      email: "test@mail.ru" , password: "12345678",
+      errors: false
     }
   },
   components: {},
   computed: {},
   methods: {
-    ...mapActions(['userAuth']),
+    ...mapActions('users',['userAuth']),
     doLogin: function  () {
-      this.userAuth(this)
+      this.errors = false;
+
+      this.userAuth(this).then((result)=>{
+        if(result != true){
+          this.errors = true;
+          return;
+        }
+
+        this.$router.push({ name: 'home' })
+
+      });
     }
   },
   mounted() { }

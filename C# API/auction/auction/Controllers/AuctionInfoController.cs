@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using auction.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static auction.Models.AuctionInfoDBModel;
@@ -10,21 +11,47 @@ using static auction.Models.StavkaUserDBModel;
 
 namespace auction.Controllers
 {
+    [EnableCors()]
     [Route("api/auction")]
     [ApiController]
     public class AuctionInfoController : Controller
     {
         [HttpGet("list")]
-        public IActionResult GetAuctionInfo()
+        public IActionResult GetAuctionList()
         {
             try
             {
-                var fellows = DatabaseConnections.OrganizationsCatalogDB.auctionInfo;
-                if (fellows != null && fellows.Any())
+                var auctions = DatabaseConnections.OrganizationsCatalogDB.auctionInfo;
+                if (auctions != null && auctions.Any())
                 {
-                    return Ok(fellows.ToList());
+                    List<AuctionInfoInStavka> auctionListStavka = new List<AuctionInfoInStavka>();
+                    foreach (AuctionInfoDBModel auctionItem in auctions)
+                    {
+                        AuctionInfoInStavka auctionInfoInStavka = new AuctionInfoInStavka();
+                        auctionInfoInStavka.auctionInfo = auctionItem;
+                        //if (DatabaseConnections.OrganizationsCatalogDB.Users.Any(x => x.id == userId))
+                        //{
+                        var stavki = DatabaseConnections.OrganizationsCatalogDB.stavkaUser.Where(x => x.auctionId == auctionItem.id);
+                        List<StavkaDBModel> listStavka = new List<StavkaDBModel>();
+                        foreach (StavkaUserDBModel item in stavki)
+                        {
+                            var stavkaItem = DatabaseConnections.OrganizationsCatalogDB.stavka.Find(item.stavkaId);
+                            listStavka.Add(stavkaItem);
+                        }
+                        auctionInfoInStavka.listStavka = listStavka;
+                        //}
+                        auctionListStavka.Add(auctionInfoInStavka);
+                    }
+                    if (auctionListStavka.Any())
+                    {
+                        return Ok(auctionListStavka);
+                    }
+                    else
+                    {
+                        return NoContent();
+                    }
                 }
-                else 
+                else
                 {
                     return NoContent();
                 }
@@ -36,35 +63,69 @@ namespace auction.Controllers
 
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
-
-        [HttpGet("{actionId}/{userId}")]
-        public IActionResult GetAuctionInfoById([FromRoute] int actionId, [FromRoute] int userId)
+/*
+        [HttpGet("list/{auctionId}")]
+        public IActionResult GetAuctionInfo([FromRoute] int auctionId)
         {
             try
             {
-                var fellows = DatabaseConnections.OrganizationsCatalogDB.auctionInfo.Find(actionId);
-                AuctionInfoInStavka auctionInfoInStavka = new AuctionInfoInStavka();
-                auctionInfoInStavka.auctionInfo = fellows;
-                if(DatabaseConnections.OrganizationsCatalogDB.Users.Any(x => x.id == userId))
+                var auctions = DatabaseConnections.OrganizationsCatalogDB.auctionInfo;
+                if (auctions != null && auctions.Any())
                 {
-                    var stavki = DatabaseConnections.OrganizationsCatalogDB.stavkaUser.Where(x => x.userId == userId && x.auctionId == actionId);
-                    List<StavkaDBModel> listStavka = new List<StavkaDBModel>();
-                    foreach(StavkaUserDBModel item in stavki)
+                    List<AuctionInfoInStavka> auctionListStavka = new List<AuctionInfoInStavka>();
+                    foreach (AuctionInfoDBModel auctionItem in auctions)
                     {
-                        var stavkaItem = DatabaseConnections.OrganizationsCatalogDB.stavka.Find(item.stavkaId);
-                        listStavka.Add(stavkaItem);
+                        AuctionInfoInStavka auctionInfoInStavka = new AuctionInfoInStavka();
+                        auctionInfoInStavka.auctionInfo = auctionItem;
+                        //if (DatabaseConnections.OrganizationsCatalogDB.Users.Any(x => x.id == userId))
+                        //{
+                        var stavki = DatabaseConnections.OrganizationsCatalogDB.stavkaUser.Where(x => x.auctionId == auctionId);
+                        List<StavkaDBModel> listStavka = new List<StavkaDBModel>();
+                        foreach (StavkaUserDBModel item in stavki)
+                        {
+                            var stavkaItem = DatabaseConnections.OrganizationsCatalogDB.stavka.Find(item.stavkaId);
+                            listStavka.Add(stavkaItem);
+                        }
+                        auctionInfoInStavka.listStavka = listStavka;
+                        //}
+                        auctionListStavka.Add(auctionInfoInStavka);
                     }
-                    auctionInfoInStavka.listStavka = listStavka;
-                }
-
-                if (fellows != null)
-                {
-                    return Ok(auctionInfoInStavka);
+                    if (auctionListStavka.Any())
+                    {
+                        return Ok(auctionListStavka);
+                    }
+                    else
+                    {
+                        return NoContent();
+                    }
                 }
                 else
                 {
                     return NoContent();
                 }
+            }
+            catch (Exception ex)
+            {
+                System.IO.File.AppendAllText("Errors.log", $"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}]{Environment.NewLine}{ex.Message}{Environment.NewLine}{Environment.NewLine}");
+            }
+
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+*/
+        [HttpGet("{actionId}")]
+        public IActionResult GetAuctionInfoById([FromRoute] int actionId)
+        {
+            try
+            {
+                var fellows = DatabaseConnections.OrganizationsCatalogDB.auctionInfo.Find(actionId);
+                if (fellows != null)
+                {
+                    return Ok(fellows);
+                }
+                else
+                {
+                    return NoContent();
+                }               
             }
             catch (Exception ex)
             {

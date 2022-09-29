@@ -6,5 +6,10 @@ export const store = new Vuex.Store({
   modules: {
       users,
       auctions
+  },
+  actions:{
+    TOGGLE_MODAL({ commit, state, modules}) {
+      modules.users.dispach('logOut');
+    }
   }
 });

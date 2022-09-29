@@ -14,7 +14,6 @@ const state = {
 };
 
 const actions = {
-
   auctionAdd({
     commit,
     state
@@ -57,31 +56,11 @@ const actions = {
       if (response.status !== 200) {
         return false; /* TODO: Обработать ошибку получения данных */
       }
-
-      /*
-        AuctionInfo()
-
-        id : int
-        name : string
-        idUser : int
-        image : string
-        timeStart : string
-        timeEnd : string
-        startStavka : int
-        stepStavka : int
-        description : string 
-      */
-
-      // response.data = response.data.map((auc) => {
-      //   auc.history = auc.history.sort((a, b) => {
-      //     return a.size < b.size
-      //   });
-      //   return auc;
-      // });
-
-      // if (JSON.stringify(response.data) !== JSON.stringify(state.auctions))
+      
       // TODO: Еще нужно так-то список ставок получать.... 
-      commit('SET_AUCTIONS', response.data);
+      if (JSON.stringify(response.data) !== JSON.stringify(state.auctions))
+        commit('SET_AUCTIONS', response.data);
+
       return true;
     }).catch((error) => {
       console.log(error);
@@ -94,14 +73,19 @@ const actions = {
     state,
     actions
   }, stavka) {
-    return Axios.get(auctionStavkaApi + stavka.auctionId, {
-      method: "POST",
-      params: {
+    
+    return Axios({
+      url: auctionStavkaApi + stavka.auctionId,
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      data: {
         idUser: stavka.idUser,
         time: stavka.time,
         size: stavka.size
-      }
-    }).then((response) => {
+    }
+  }).then((response) => {
       if( response.status == 200 ){
         return true;
       }
@@ -157,7 +141,7 @@ const actions = {
 const getters = {
   AUCTIONS(state) {
     return state.auctions;
-  }
+  },
 };
 
 const mutations = {

@@ -1,3 +1,3 @@
 export default {
-    apiUrl: 'http://auction-pi19s.ml:3000/api'
+    apiUrl: 'http://localhost:5000/api'
 };
