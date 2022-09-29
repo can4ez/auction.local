@@ -1,8 +1,11 @@
 <template>
   <div class="wrapper">
         <v-site-header/>
-        <div class="views">
+        <div class="views" v-if="this.dataLoaded == true">
           <router-view/>
+        </div>
+        <div class="info" v-else>
+          Идет загрузка данных...
         </div>
         <v-site-footer/>
   </div>
@@ -14,33 +17,27 @@ import vSiteFooter from '@/components/footer/SiteFooter.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  data(){
+    return { dataLoaded: false}
+  },
   components: {
     vSiteHeader,
     vSiteFooter
   },
   methods: {
-    ...mapActions('auctions',[
+    ...mapActions( 'auctions' , [
       'auctionList'
     ]),
-    ...mapActions('users',[
+    ...mapActions( 'users' , [
       'userList'
     ]),
   },
   mounted(){
-    this.auctionList()
-    this.userList()
-
-    // Обновление списка аукционов каждые 3 секунды
-    setInterval(function(){
-      this.auctionList()
-    }.bind(this), 3000);
-
-    // Обновление списка аукционов каждые 3 секунды
-    setInterval(function(){
-      this.userList()
-    }.bind(this), 4000);
-
-      
+    this.userList().then((result)=>{
+      this.auctionList().then((result)=>{
+        this.dataLoaded = true;
+      })
+    })   ;
   },
   strict: true
 }

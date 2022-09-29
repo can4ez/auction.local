@@ -1,3 +1,3 @@
 export default {
-    apiUrl: 'http://localhost:5000/api'
+    apiUrl: 'http://178.47.140.37:80/api'
 };

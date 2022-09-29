@@ -18,18 +18,23 @@ const actions = {
     commit,
     state
   }, data) {
-    return Axios.get(auctionAddApi, {
-      method: "POST",
-      params: {
+    return Axios({
+      url: auctionAddApi,
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      data: {
         name: data.name,
         idUser: data.idUser,
         image: data.image,
         timeStart: data.timeStart,
         timeEnd: data.timeEnd,
         startStavka: data.startStavka,
-        stepStavka: data.stepStavka
-      }
-    }).then((response) => {
+        stepStavka: data.stepStavka,
+        description: data.description
+    }
+  }).then((response) => {
 
       if (response.status == 201) {
         /* TODO: Какой формат ответа? */
@@ -117,25 +122,9 @@ const actions = {
     });
   },
 
-  /* TODO: Аукцион по ID со списком ставок по пользователю, FIXME: НЕ ЛОГИЧНО */
-  /* TODO: Какой формат запроса? */
-  auctionStavkaList({
-    commit,
-    state
-  }, data) {
-    return Axios.get(auctionStavkaListApi + data.aucId, {
-      method: "GET"
-    }).then((response) => {
-      if (response.status !== 200) {
-        return false; /* TODO: Обработать ошибку получения данных */
-      }
-      /* TODO: Какой формат ответа? */
-      return response.data;
-    }).catch((error) => {
-      console.log(error);
-      return error;
-    });
-  },
+  getAuctionInfo({state}, data){
+    return state.auctions.find((item) => { if (item.auctionInfo.id == data) { return item; } });
+  }
 };
 
 const getters = {

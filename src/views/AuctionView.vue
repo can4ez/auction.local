@@ -2,63 +2,64 @@
   <div class='auctionView'>
     <!-- {{AUCTION}} -->
 
-    <div class="error" v-if="AUCTION == undefined">
+    <div class="error" v-if="loaded == false">
       Данные загружаются...
     </div>
 
     <div class="container fluid" v-else>
+
       <div class="columns  is-multiline">
         <div class="column is-12">
-          <h4 class="title">{{AUCTION.auctionInfo.name}}</h4>
+          <h4 class="title">{{INFO.name}}</h4>
         </div>
         <div class="column is-12 p-0">
           <div class="columns">
             <div class="image column is-4">
-              <img :src="AUCTION.auctionInfo.image" alt="" style="" class="">
+              <img :src="INFO.image" alt="" style="" class="">
             </div>
             <div class="column  is-8  p-0">
               <div class="columns is-multiline is-12 p-0">
-                <div class="column is-12">
-                  Ваша ставка ....
-                  <input 
-                  type="number" 
-                  :min="MIN_STAVKA"
-                  class="input" 
-                  v-model="stavka">
 
-                  <div class="button" 
-                  @click="submitStavka(stavka)">Сделать ставку</div>
+                <article class="column is-12 message is-danger" v-if="errors.length > 0">
+                  <div class="message-header" v-for="err in errors" :key="err">
+                    <p>{{err}}</p>
+                    <button class="delete" aria-label="delete"
+                      v-on:click=" this.errors = this.errors.filter((e) => e != err); "></button>
+                  </div>
+                </article>
 
-                  <div class="button" 
-                  @click="submitStavka(MIN_STAVKA)">Ставка с минимальным шагом</div>
-
-                  
+                <div class="column is-12" v-if="this.USER.id == null">
+                  <article class="column is-12 message is-info" >
+                    <div class="message-header">
+                      <p>Войдите, чтобы сделать ставку</p>
+                    </div>
+                  </article>
                 </div>
-                <div class="column is-12 is-multiline errors" v-if="errors.length > 0">
-                  <div class="column is-12 error" v-for="err in errors">
-                      {{err}}
+                <div class="column is-12" v-else>
+                  <h2>Ваша ставка ....</h2>
+                  <input type="number" :min="MIN_STAVKA" class="input" v-model="stavka">
+                  <div class="button" @click="submitStavka(stavka)">Сделать ставку</div>
+                  <div class="button" @click="submitStavka(MIN_STAVKA)">Ставка с минимальным шагом</div>
+                </div>
+
+                <div class="column is-12">
+                  <h2>История ставок: </h2>
+                  <div class="columns is-multiline history">
+                    <p v-if="HISTORY_SORTED.length == 0">Ставок нет, вы можете быть первым...</p>
+                    <div class="column is-12 p-0" v-else v-for="st in HISTORY_SORTED">
+                      {{st.size}} руб. {{st.name || getUserName(st) }}
+                    </div>
+                  </div>
+                  <h3>Начальная ставка: {{INFO.startStavka}}</h3>
+                  <h3>Шаг: {{INFO.stepStavka}}</h3>
+                </div>
+
+                <div class="column is-12">
+                  <h2>Описание лота:</h2>
+                  <div class="columns is-multiline info">
+                    <p>{{INFO.description}}</p>
                   </div>
                 </div>
-
-<div class="column is-12">
-  <h2>История ставок: </h2>
-  <div class="columns is-multiline history">
-    <div 
-      class="column is-12 p-0" 
-      v-for="st in AUCTION.listStavka.sort((a, b) => { return a.size < b.size })">
-      {{st.size}} руб. {{USER_BY_ID()(st.idUser).name}}
-    </div>
-  </div>
-  <h3>Начальная ставка: {{AUCTION.auctionInfo.startStavka}}</h3>
-  <h3>Шаг: {{AUCTION.auctionInfo.stepStavka}}</h3>
-</div>
-
-<div class="column is-12">
-  <h2>Описание лота:</h2>
-  <div class="columns is-multiline info">
-    <p>{{AUCTION.auctionInfo.description}}</p>
-  </div>
-</div>
 
               </div>
             </div>
@@ -66,8 +67,11 @@
           </div>
         </div>
       </div>
+
     </div>
+
   </div>
+
 </template>
 
 <script>
@@ -77,7 +81,7 @@ export default {
   data() {
     return {
       loaded: false,
-      stavka : 0,
+      stavka: 0,
       auction: null,
       errors: []
     }
@@ -85,47 +89,65 @@ export default {
   components: {
   },
   computed: {
-    ...mapGetters('auctions', [
-      'AUCTIONS'
-    ]),
 
-    AUCTION: function () {
-if(this.AUCTIONS == null){return {};}
-      if(this.auction == null){
-        this.auction = this.AUCTIONS.find((item) => { if (item.auctionInfo.id == this.$route.query.id) { return item; } });
-      }
-
-      return this.auction;
+    INFO: function () {
+      return this.auction.auctionInfo;
     },
+
+    HISTORY: function () {
+      return this.auction.listStavka;
+    },
+    HISTORY_SORTED: function () {
+      return this.HISTORY.sort((a, b) => { return a.size < b.size });
+    },
+    MAX_STAVKA: function () {
+      return this.HISTORY.reduce((a, b) => {
+        return { size: Math.max(a.size, b.size) };
+      }, { size: this.INFO.startStavka }).size;
+    },
+
     MIN_STAVKA: function () {
-      return this.getMaxStavka(this.AUCTION) + Number(this.AUCTION.stepStavka);
-    }
+      return this.MAX_STAVKA + Number(this.INFO.stepStavka);
+    },
+
+    ...mapGetters('users', ['USER']),
   },
   methods: {
-    ...mapGetters('users', [
-      'USER_BY_ID', 'USER'
-    ]),
-    ...mapActions('auctions',['auctionStavka']),
+    ...mapActions('users', ['getUserByID']),
+    ...mapActions('auctions', ['getAuctionInfo', 'auctionStavka', 'auctionList']),
 
-    submitStavka: function (stavka){
+    submitStavka: function (stavka) {
       this.stavka = stavka;
       this.errors = [];
-      if(stavka < this.MIN_STAVKA){
-        this.errors = ['Минимальная ставка: '+this.MIN_STAVKA]
+      if (stavka < this.MIN_STAVKA) {
+        this.errors = ['Минимальная ставка: ' + this.MIN_STAVKA]
         return;
       }
 
       this.auctionStavka({
         auctionId: this.$route.query.id,
-        idUser: this.USER.id ?? 1,
+        idUser: this.USER.id,
         time: 0,
         size: this.stavka
-      })
+      }).then((result) => {
+        this.auctionList().then((response) => {
+          this.loadAuctionData();
+        });
+      });
     },
-    getMaxStavka: function (auc) {
-      let max = auc.auctionInfo.startStavka;
-      auc.listStavka.map((s) => { if (s.size > max) max = s.size; });
-      return max;
+
+    getUserName: function (st) {
+      this.getUserByID(st.idUser).then((e) => {
+        st.name = e.name;
+      });
+    },
+
+    loadAuctionData() {
+      this.getAuctionInfo(this.$route.query.id).then((result) => {
+        this.auction = result;
+        this.stavka = this.MIN_STAVKA;
+        this.loaded = true;
+      })
     }
   },
   mounted() {
@@ -134,7 +156,7 @@ if(this.AUCTIONS == null){return {};}
       return;
     }
 
-    this.stavka =  Number(this.getMaxStavka(this.AUCTION) + Number(this.AUCTION.auctionInfo.stepStavka));
+    this.loadAuctionData();
   }
 }
 </script>

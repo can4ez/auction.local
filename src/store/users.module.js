@@ -112,6 +112,25 @@ const actions = {
 
   logOut({commit, state}){
     state.user = null;
+  },
+
+  
+  getUserByID({commit, state, actions}, id){
+
+    const findUser = (id) => {
+      return state.users.find((usr) => {
+        if (usr.id == id)
+          return usr;
+        });
+    };
+
+    if (state.users == null) {
+      return actions.userList().then((result)=>{
+          return findUser(id);
+      });
+    }
+
+    return findUser(id);
   }
 
 };
@@ -128,16 +147,6 @@ const mutations = {
 const getters = {
   USER(state) {
     return state.user ?? {};
-  },
-  USER_BY_ID: (state) => (id) => {
-    if (state.users == null) {
-      return {};
-    }
-
-    return state.users.find((usr) => {
-      if (usr.id == id)
-        return usr;
-    });
   }
 }
 

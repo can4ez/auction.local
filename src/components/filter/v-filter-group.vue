@@ -6,7 +6,11 @@
   <label class="label">{{legend}}</label>
   <p class="control">
     <span class="select">
-      <select :name="uniqName" :id="uniqName">
+      <select 
+      :name="uniqName" 
+      :id="uniqName"
+      @input="onchange($event)"
+      v-model="data">
         <option v-for="row in options" :value="row.value">{{row.text}}</option>
       </select>
     </span>
@@ -22,9 +26,13 @@
     <div class="control">
       <input class="input" 
               :type="inputType"
+              @change="onchange($event)"  
+              v-model="data"
+      >
+      <!-- 
               :value="(row.value !== undefined && !valueAsPlaceholder) ? row.value : ''"
               :placeholder="(row.value !== undefined && valueAsPlaceholder) ? row.value : ''"
-      >
+             -->
     </div>
   </div>
 </div>
@@ -39,10 +47,11 @@ export default {
     inputType: { default: 'text' },
     legend: { default: '' },
     options: { default: [] },
-    valueAsPlaceholder: { default: false }
+    valueAsPlaceholder: { default: false },
   },
   data () {
     return {
+      data: null
     }
   },
   components: { },
@@ -51,10 +60,13 @@ export default {
   },
   methods: {
 
-    CLASSES: () => {
+    CLASSES: function (){
       return {
         'filter-group': true
       }
+    },
+    onchange: function (event) {
+      this.$emit('onchange' , this.data);
     }
 
   },

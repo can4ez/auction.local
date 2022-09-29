@@ -63,55 +63,7 @@ namespace auction.Controllers
 
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
-/*
-        [HttpGet("list/{auctionId}")]
-        public IActionResult GetAuctionInfo([FromRoute] int auctionId)
-        {
-            try
-            {
-                var auctions = DatabaseConnections.OrganizationsCatalogDB.auctionInfo;
-                if (auctions != null && auctions.Any())
-                {
-                    List<AuctionInfoInStavka> auctionListStavka = new List<AuctionInfoInStavka>();
-                    foreach (AuctionInfoDBModel auctionItem in auctions)
-                    {
-                        AuctionInfoInStavka auctionInfoInStavka = new AuctionInfoInStavka();
-                        auctionInfoInStavka.auctionInfo = auctionItem;
-                        //if (DatabaseConnections.OrganizationsCatalogDB.Users.Any(x => x.id == userId))
-                        //{
-                        var stavki = DatabaseConnections.OrganizationsCatalogDB.stavkaUser.Where(x => x.auctionId == auctionId);
-                        List<StavkaDBModel> listStavka = new List<StavkaDBModel>();
-                        foreach (StavkaUserDBModel item in stavki)
-                        {
-                            var stavkaItem = DatabaseConnections.OrganizationsCatalogDB.stavka.Find(item.stavkaId);
-                            listStavka.Add(stavkaItem);
-                        }
-                        auctionInfoInStavka.listStavka = listStavka;
-                        //}
-                        auctionListStavka.Add(auctionInfoInStavka);
-                    }
-                    if (auctionListStavka.Any())
-                    {
-                        return Ok(auctionListStavka);
-                    }
-                    else
-                    {
-                        return NoContent();
-                    }
-                }
-                else
-                {
-                    return NoContent();
-                }
-            }
-            catch (Exception ex)
-            {
-                System.IO.File.AppendAllText("Errors.log", $"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}]{Environment.NewLine}{ex.Message}{Environment.NewLine}{Environment.NewLine}");
-            }
 
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        }
-*/
         [HttpGet("{actionId}")]
         public IActionResult GetAuctionInfoById([FromRoute] int actionId)
         {
