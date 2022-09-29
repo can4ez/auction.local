@@ -44,8 +44,8 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      name: "Александр",
-      email: "test@mail.ru", password: "12345678", password2: "12345678",
+      name: "",
+      email: "", password: "", password2: "",
       errors: false
     }
   },
@@ -54,6 +54,8 @@ export default {
   methods: {
     ...mapActions('users', ['userRegister']),
     doRegister: function () {
+
+      this.errors = false;
 
       if (this.password2 !== this.password) {
         this.errors = true;
@@ -64,7 +66,11 @@ export default {
       this.userRegister(this).then((result) => {
         if (result != true) {
           this.errors = true;
-          this.errorMsg = result;
+          
+          this.errorMsg = 
+                result.response != undefined 
+                && result.response.data.error != undefined ? 
+                result.response.data.error : 'ошибка формата данных';
           return;
         }
 
@@ -81,9 +87,11 @@ export default {
 .registerView {
   display: flex;
   justify-content: center;
+  min-height: 64vh;
 }
 
 .registerView .box {
   width: 50%;
+  height: 100%;
 }
 </style>

@@ -1,10 +1,9 @@
 <template>
-  <div class='createAuction'>
-    
+  <div class='createAuction card p-6 form'>
     <div class="field" v-if="this.errors == true">
       <article class="message is-danger">
         <div class="message-header">
-          <p>Неверный логин или Пароль</p>
+          <p>Неверный формат данных</p>
           <button class="delete" aria-label="delete" v-on:click="this.errors = false"></button>
         </div>
       </article>
@@ -103,20 +102,40 @@ export default {
   methods: {
     ...mapGetters('users', ['USER']),
     ...mapActions('auctions', ['auctionAdd', 'auctionList']),
-
+    
+    isNumber(n){
+      return typeof n == 'number' && !isNaN(n) && isFinite(n);
+    },
     doCreate: function (){
+      
+      if(this.size_min < 0 || !this.isNumber(this.size_min)){
+        this.errors = true;
+        return;
+      }
+      
+      if(this.size_step < 0 || !this.isNumber(this.size_step)){
+        this.errors = true;
+        return;
+      }
+
       let data = {
         name: this.name,
         idUser: this.USER().id,
         image: this.uri,
         timeStart: Date.now(),
-        timeEnd: Date.now() + (24 * this.duration),
+        timeEnd: Date.now() + (60*60*24 * this.duration)*1000 ,
         startStavka: this.size_min,
         stepStavka: this.size_step,
         description: this.description
       };
 
       this.auctionAdd(data).then((response)=>{
+
+        if(response != true){
+          this.errors = true;
+          return;
+        }
+
         this.auctionList().then(()=>{
           this.$router.push({ name: 'home' })
         });        

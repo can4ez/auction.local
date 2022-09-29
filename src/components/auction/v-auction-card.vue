@@ -10,12 +10,12 @@
                 <div class="card-footer-item">
                     <div class="columns is-mobile is-multiline">
                         <div class="column is-12">
-                            <h4 class="title">{{INFO.name}}</h4>
+                            <h4 class="title">[{{USER_NAME}}] {{INFO.name}}</h4>
                         </div>
                         <div class="column is-6">
                             <p class="mb-2" style="font-size:12px;">Окончание аукциона</p><span
                                 class="tag is-danger is-light"
-                                style="font-size:12px;">{{INFO.timeEnd}}</span>
+                                style="font-size:12px;">{{OUT_DATE}}</span>
                         </div>
                         <div class="column is-6">
                             <p class="mb-2" style="font-size:12px;">Лучшая ставка</p><span
@@ -32,6 +32,7 @@
 </template>
     
 <script>
+    import { mapGetters } from 'vuex'; 
 export default {
     props: {
         auction: null
@@ -48,7 +49,38 @@ export default {
             return this.HISTORY.reduce((a, b) => { 
                 return {size: Math.max(a.size, b.size)};
             }, {size:this.INFO.startStavka}).size;
-        }
+        },
+
+        OUT_DATE: function () {
+  let time = Number(this.INFO.timeEnd) - new Date();
+  if(time < 0 || isNaN(time)){  return "Завершен"; }
+
+  var delta = time / 1000;
+  var days = Math.floor(delta / 86400);
+  delta -= days * 86400;
+  var hours = Math.floor(delta / 3600) % 24;
+  delta -= hours * 3600;
+  var minutes = Math.floor(delta / 60) % 60;
+  delta -= minutes * 60;
+  var seconds = Math.floor(delta) % 60;
+
+  var result = "";
+
+  if(days > 0) result = result + " " + days + " д.";
+  if(hours > 0) result = result + " " + hours + " ч."; 
+  if(minutes > 0) result = result + " " + minutes + " м.";
+  if(seconds > 0) result = result + " " + seconds + " с.";
+
+
+  return result;
+},
+
+USER_NAME: function () { 
+    return this.USERS.find(e => {
+         return e.id == this.INFO.idUser;
+    }).name;
+},
+    ...mapGetters('users', ['USERS']),
     },
     methods: {
         openAuction: function () {

@@ -14,28 +14,28 @@
 
 
       <div class="filter-groups">
-        <v-filter-group uniqName="work" inputType="select" legend="Типы работы" :options="[
+        <!-- <v-filter-group uniqName="work" inputType="select" legend="Типы работы" :options="[
           {name:'type', value:'none', text:'Выберите тип работы'},
           {name:'type', value:'tradition', text:'традицишионал'},
           {name:'type', value:'digital', text:'диджитал'},
           {name:'type', value:'animation', text:'анимация'},
-        ]" v-on:onchange="(data)=> this.work = data" />
+        ]" v-on:onchange="(data)=> this.work = data" def="none" /> -->
 
         <v-filter-group uniqName="price" inputType="number" legend="Ценовой диапазон" :valueAsPlaceholder="true"
           :options="[
             {name:'min', value:0, text:'От '},
-          ]" v-on:onchange="(data)=> this.price_min = data" />
+          ]" v-on:onchange="(data)=> this.price_min = data" def="0" />
 
         <v-filter-group uniqName="price" inputType="number" legend="" :valueAsPlaceholder="true" :options="[
           {name:'max', value:0, text:'До '},
-        ]" v-on:onchange="(data)=> this.price_max = data" />
+        ]" v-on:onchange="(data)=> this.price_max = data" def="0" />
 
-        <v-filter-group uniqName="style" inputType="select" legend="Типы лота" :options="[
+        <!-- <v-filter-group uniqName="style" inputType="select" legend="Типы лота" :options="[
           {name:'type', value:'none', text:'Выберите тип лота'},
           {name:'type', value:'realism', text:'реализм'},
           {name:'type', value:'styling', text:'стилизация'},
           {name:'type', value:'antro', text:'антро'},
-        ]" v-on:onchange="(data)=> this.style = data" />
+        ]" v-on:onchange="(data)=> this.style = data" def="none" /> -->
       </div>
 
 
@@ -84,7 +84,7 @@ export default {
 
     AUCTIONS_SORTED: function () {
 
-      let result = this.AUCTIONS.map(e => e);
+      let result = this.AUCTIONS.filter(e => e.auctionInfo.timeEnd > Date.now() ).sort((a, b) => a.auctionInfo.timeEnd <= b.auctionInfo.timeEnd );
 
       if (this.search != "") {
         result = result.filter(e => e.auctionInfo.name.includes(this.search));
@@ -125,7 +125,7 @@ export default {
   padding: 1rem;
   border: 2px solid black;
   border-radius: 2rem;
-  max-height: 30em;
+  max-height: 18em;
 }
 
 .content-block {}

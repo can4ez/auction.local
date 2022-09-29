@@ -10,7 +10,7 @@
 
       <div class="columns  is-multiline">
         <div class="column is-12">
-          <h4 class="title">{{INFO.name}}</h4>
+          <h4 class="title">[{{USER_NAME}}] | {{INFO.name}}</h4>
         </div>
         <div class="column is-12 p-0">
           <div class="columns">
@@ -43,15 +43,18 @@
                 </div>
 
                 <div class="column is-12">
-                  <h2>История ставок: </h2>
+                  <h2><b>История ставок:</b> </h2>
                   <div class="columns is-multiline history">
                     <p v-if="HISTORY_SORTED.length == 0">Ставок нет, вы можете быть первым...</p>
                     <div class="column is-12 p-0" v-else v-for="st in HISTORY_SORTED">
                       {{st.size}} руб. {{st.name || getUserName(st) }}
                     </div>
                   </div>
-                  <h3>Начальная ставка: {{INFO.startStavka}}</h3>
-                  <h3>Шаг: {{INFO.stepStavka}}</h3>
+                </div>
+                <div class="column is-12">
+                  <h3><b>Начальная ставка:</b> {{INFO.startStavka}}</h3>
+                  <h3><b>Шаг:</b> {{INFO.stepStavka}}</h3>
+                  <h3><b>Окончание аукциона:</b> {{ OUT_DATE }}</h3>
                 </div>
 
                 <div class="column is-12">
@@ -110,7 +113,36 @@ export default {
       return this.MAX_STAVKA + Number(this.INFO.stepStavka);
     },
 
-    ...mapGetters('users', ['USER']),
+    USER_NAME: function () { 
+    return this.USERS.find(e => {
+         return e.id == this.INFO.idUser;
+    }).name;
+},
+
+    OUT_DATE: function () {
+  let time = Number(this.INFO.timeEnd) - new Date();
+  if(time < 0 || isNaN(time)){  return "Завершен"; }
+
+  var delta = time / 1000;
+  var days = Math.floor(delta / 86400);
+  delta -= days * 86400;
+  var hours = Math.floor(delta / 3600) % 24;
+  delta -= hours * 3600;
+  var minutes = Math.floor(delta / 60) % 60;
+  delta -= minutes * 60;
+  var seconds = Math.floor(delta) % 60;
+
+  var result = "";
+
+  if(days > 0) result = result + " " + days + " д.";
+  if(hours > 0) result = result + " " + hours + " ч."; 
+  if(minutes > 0) result = result + " " + minutes + " м.";
+  if(seconds > 0) result = result + " " + seconds + " с.";
+
+
+  return result;
+},
+    ...mapGetters('users', ['USER','USERS']),
   },
   methods: {
     ...mapActions('users', ['getUserByID']),
@@ -130,6 +162,11 @@ export default {
         time: 0,
         size: this.stavka
       }).then((result) => {
+
+        if(result != true){
+          this.errors = ['Ошибка: некорректный ввод данных, ставка отменена'];
+        }
+
         this.auctionList().then((response) => {
           this.loadAuctionData();
         });

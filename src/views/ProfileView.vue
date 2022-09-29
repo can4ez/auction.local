@@ -1,5 +1,5 @@
 <template>
-  <div class='profileView'>
+  <div class='profileView container is-fluid p-6'>
     <p>ID: {{USER.id}}</p>
     <p>Имя: {{USER.name}}</p>
     <p>Почта: {{USER.email}}</p>
@@ -33,8 +33,9 @@ export default {
     ...mapGetters('auctions', ['AUCTIONS']),
 
     AUCTIONS_SORTED: function () {
+      
       let result = this.AUCTIONS
-      .map(e => e)
+      .filter(e => e.auctionInfo.idUser == this.USER.id )
       .sort((a, b) => a.auctionInfo.timeEnd < b.auctionInfo.timeEnd);
       return result;
     },

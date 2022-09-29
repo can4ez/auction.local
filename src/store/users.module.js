@@ -147,6 +147,9 @@ const mutations = {
 const getters = {
   USER(state) {
     return state.user ?? {};
+  },
+  USERS(state) {
+    return state.users ?? {};
   }
 }
 

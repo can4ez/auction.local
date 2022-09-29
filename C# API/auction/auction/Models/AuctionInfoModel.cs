@@ -41,11 +41,11 @@ namespace auction.Models
         {
             public int id { get; set; }
             [Required]
-            [StringLength(50, MinimumLength = 5)]
+            [StringLength(128, MinimumLength = 5)]
             public string name { get; set; }
             [Required]
             public int idUser { get; set; }
-            [StringLength(150, MinimumLength = 5)]
+            [StringLength(1024, MinimumLength = 5)]
             public string image { get; set; }
             [StringLength(50, MinimumLength = 5)]
             public string timeStart { get; set; }
@@ -53,7 +53,7 @@ namespace auction.Models
             public string timeEnd { get; set; }
             public int startStavka { get; set; }
             public int stepStavka { get; set; }
-            [StringLength(150, MinimumLength = 5)]
+            [StringLength(1024, MinimumLength = 0)]
             public string description { get; set; }
 
             public static AuctionInfoDTModel Convert(AuctionInfoDBModel fellowDBModel)

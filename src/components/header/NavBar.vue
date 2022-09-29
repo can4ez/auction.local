@@ -34,8 +34,12 @@ export default {
 </script>
 
 <style lang="scss">
+  
   nav.navbar { 
-    
+    .columns .is-multiline .is-half{
+      gap: 1rem;
+      display: flex;
+    }  
     justify-content: center;
 
     background-color: var(--color-header-menu-bg);

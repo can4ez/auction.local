@@ -48,6 +48,7 @@ export default {
     legend: { default: '' },
     options: { default: [] },
     valueAsPlaceholder: { default: false },
+    def: {default: ''}
   },
   data () {
     return {
@@ -70,7 +71,7 @@ export default {
     }
 
   },
-  mounted () { }
+  mounted () { this.data = this.def; }
 }
 </script>
 

@@ -67,6 +67,22 @@ namespace auction.Controllers
         {
             try
             {
+                var fellows = DatabaseConnections.OrganizationsCatalogDB.Users.Any(
+                    item => (item.email == fellowDTModel.email));
+
+                if (fellows)
+                {
+                    return BadRequest("{\"error\": \"Пользователь с такой почтой уже существует.\"}");
+                }
+
+                fellows = DatabaseConnections.OrganizationsCatalogDB.Users.Any(
+                    item => (item.name == fellowDTModel.name));
+
+                if (fellows)
+                {
+                    return BadRequest("{\"error\": \"Пользователь с таким именем уже существует.\"}");
+                }
+
                 if (fellowDTModel != null && ModelState.IsValid)
                 {
                     DatabaseConnections.OrganizationsCatalogDB.Users.Add(UserDBModel.Convert(fellowDTModel));
@@ -75,7 +91,7 @@ namespace auction.Controllers
                     return Created($"{Request.Path}/{DatabaseConnections.OrganizationsCatalogDB.Users.Last().id}", UserDTModel.Convert(DatabaseConnections.OrganizationsCatalogDB.Users.Last()));
                 }
 
-                return BadRequest();
+                return BadRequest("{\"error\": \"Ошибка формата данных\"}");
             }
             catch (Exception ex)
             {

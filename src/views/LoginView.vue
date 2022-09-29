@@ -1,12 +1,12 @@
 <template>
   <div class='loginView'>
-            <div class="box">
+            <div class="box is-fullheight">
               <!-- <form> -->
 
                 <div class="field" v-if="this.errors == true">
                   <article class="message is-danger">
                     <div class="message-header">
-                      <p>Неверный логин или Пароль</p>
+                      <p>Ошибка: Неверный логин или пароль</p>
                       <button class="delete" aria-label="delete" 
                       v-on:click="this.errors = false"></button>
                     </div>
@@ -72,6 +72,14 @@ export default {
 </script>
 
 <style lang='scss'>
-  .loginView{display: flex; justify-content: center;}
-.loginView .box{ width:  50%;}
+.loginView {
+  display: flex;
+  justify-content: center;
+  min-height: 64vh;
+}
+
+.loginView .box {
+  width: 50%;
+  height: 100%;
+}
 </style>

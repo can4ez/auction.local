@@ -5,7 +5,6 @@ C:\OpenServer\domains\auction.local\C# API\auction\auction\bin\Release\netcoreap
 C:\OpenServer\domains\auction.local\C# API\auction\auction\bin\Release\netcoreapp2.2\auction.runtimeconfig.dev.json
 C:\OpenServer\domains\auction.local\C# API\auction\auction\bin\Release\netcoreapp2.2\auction.dll
 C:\OpenServer\domains\auction.local\C# API\auction\auction\bin\Release\netcoreapp2.2\auction.pdb
-C:\OpenServer\domains\auction.local\C# API\auction\auction\obj\Release\netcoreapp2.2\auction.csproj.AssemblyReference.cache
 C:\OpenServer\domains\auction.local\C# API\auction\auction\obj\Release\netcoreapp2.2\auction.GeneratedMSBuildEditorConfig.editorconfig
 C:\OpenServer\domains\auction.local\C# API\auction\auction\obj\Release\netcoreapp2.2\auction.AssemblyInfoInputs.cache
 C:\OpenServer\domains\auction.local\C# API\auction\auction\obj\Release\netcoreapp2.2\auction.AssemblyInfo.cs
