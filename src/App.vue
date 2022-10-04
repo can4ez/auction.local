@@ -33,8 +33,8 @@ export default {
     ]),
   },
   mounted(){
-    this.userList().then((result)=>{
-      this.auctionList().then((result)=>{
+    this.userList().finally((result)=>{
+      this.auctionList().finally((result)=>{
         this.dataLoaded = true;
       })
     })   ;
@@ -77,6 +77,9 @@ body{
 }
 .views{
   padding: 1rem;
+}
+#app + *{
+  display: none;
 }
 
 </style>

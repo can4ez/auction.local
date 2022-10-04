@@ -343,3 +343,12 @@ A second operation started on this context before a previous operation completed
 [29.09.2022 20:02:19]
 A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.
 
+[03.10.2022 19:57:04]
+There is insufficient system memory in resource pool 'internal' to run this query.
+Error: 596, Severity: 21, State: 1. (Params:). The error is printed in terse mode because there was error during formatting. Tracing, ETW, notifications etc are skipped.
+
+A severe error occurred on the current command.  The results, if any, should be discarded.
+
+[03.10.2022 19:57:12]
+A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of DbContext, however instance members are not guaranteed to be thread safe. This could also be caused by a nested query being evaluated on the client, if this is the case rewrite the query avoiding nested invocations.
+

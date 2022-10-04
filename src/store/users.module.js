@@ -16,7 +16,7 @@ const state = {
 const actions = {
 
   userRegister({
-    commit
+    commit, actions
   }, data) {
     return Axios({
       url: userRegisterApi,
@@ -30,11 +30,11 @@ const actions = {
         name: data.name, //"Dmitrii"
       }
     }).then((response) => {
-      /* TODO: Какой формат ответа? */
+      actions.userList();
       if (response.status == 201)
-        return response.data; /* TODO: Тут вроде вернет данные пользователя */
+        return true;
       else
-        return false; /* TODO: Обработать ошибку регистрации */
+        return response;
     }).catch((error) => {
       console.log(error);
       return error;
@@ -52,8 +52,8 @@ const actions = {
         'Content-Type': 'application/json',
       },
       data: {
-        email: data.email, //"hd.anufriev@yandex.ru",
-        password: data.password, //"123456",
+        email: data.email,
+        password: data.password,
       }
     }).then((response) => {
       if (response.status == 200) {
@@ -62,7 +62,7 @@ const actions = {
         }));
         return true;
       } else if (response.status == 204) {
-        return false; /* TODO: Обработать ошибку регистрации */
+        return false;
       }
     }).catch((error) => {
       console.log(error);
@@ -111,6 +111,7 @@ const actions = {
   },
 
   logOut({commit, state}){
+    localStorage.user = null;
     state.user = null;
   },
 
@@ -138,6 +139,7 @@ const actions = {
 const mutations = {
   SET_USER(state, user) {
     state.user = user;
+    localStorage.user = JSON.stringify(user);
   },
   SET_ALL(state, users) {
     state.users = users;
@@ -146,6 +148,16 @@ const mutations = {
 
 const getters = {
   USER(state) {
+    if (!state.user) {
+      if (localStorage.user) {
+        try{state.user = JSON.parse (localStorage.user);}
+        catch (e) {
+          state.user = null;
+          localStorage.user = null;
+        }
+      }
+    }
+
     return state.user ?? {};
   },
   USERS(state) {

@@ -5,6 +5,8 @@ import ProfileView from '@/views/ProfileView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import AuctionView from '@/views/AuctionView.vue'
 import CreateAuctionView from '@/views/CreateAuctionView.vue'
+import FAQView from '@/views/FAQView.vue'
+
 import { mapActions } from 'vuex';
 
 const router = createRouter({
@@ -39,6 +41,11 @@ const router = createRouter({
       path: '/auction/add',
       name: 'createAuction',
       component: CreateAuctionView
+    },
+    {
+      path: '/faq',
+      name: 'faq',
+      component: FAQView
     },
     {
       path: '/logout',

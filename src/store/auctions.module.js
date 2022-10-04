@@ -35,17 +35,17 @@ const actions = {
         description: data.description
     }
   }).then((response) => {
+    console.log(response);
 
       if (response.status == 201) {
-        /* TODO: Какой формат ответа? */
-        return response.data;
+        return true;
       } else {
         return false; /* TODO: Обработать ошибку добавления */
       }
 
     }).catch((error) => {
       console.log(error);
-      return error;
+      return false;
     });
   },
 

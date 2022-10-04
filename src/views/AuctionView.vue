@@ -28,19 +28,26 @@
                   </div>
                 </article>
 
-                <div class="column is-12" v-if="this.USER.id == null">
-                  <article class="column is-12 message is-info" >
-                    <div class="message-header">
-                      <p>Войдите, чтобы сделать ставку</p>
-                    </div>
-                  </article>
-                </div>
-                <div class="column is-12" v-else>
-                  <h2>Ваша ставка ....</h2>
-                  <input type="number" :min="MIN_STAVKA" class="input" v-model="stavka">
-                  <div class="button" @click="submitStavka(stavka)">Сделать ставку</div>
-                  <div class="button" @click="submitStavka(MIN_STAVKA)">Ставка с минимальным шагом</div>
-                </div>
+                  <div class="column is-12" v-if="this.USER.id == null">
+                    <article class="column is-12 message is-info">
+                      <div class="message-header">
+                        <p>Войдите, чтобы сделать ставку</p>
+                      </div>
+                    </article>
+                  </div>
+                  <div class="column is-12"  v-else-if="(Number(INFO.timeEnd) - new Date() < 0 || isNaN(Number(INFO.timeEnd) - new Date()))">
+                    <article class="column is-12 message is-dabger">
+                      <div class="message-header">
+                        <p>Аукцион завершен</p>
+                      </div>
+                    </article>
+                  </div>
+                  <div class="column is-12" v-else>
+                    <h2>Ваша ставка ....</h2>
+                    <input type="number" :min="MIN_STAVKA" class="input" v-model="stavka">
+                    <div class="button" @click="submitStavka(stavka)">Сделать ставку</div>
+                    <div class="button" @click="submitStavka(MIN_STAVKA)">Ставка с минимальным шагом</div>
+                  </div>
 
                 <div class="column is-12">
                   <h2><b>История ставок:</b> </h2>
@@ -58,7 +65,7 @@
                 </div>
 
                 <div class="column is-12">
-                  <h2>Описание лота:</h2>
+                  <h2><b>Описание лота:</b></h2>
                   <div class="columns is-multiline info">
                     <p>{{INFO.description}}</p>
                   </div>
@@ -101,7 +108,7 @@ export default {
       return this.auction.listStavka;
     },
     HISTORY_SORTED: function () {
-      return this.HISTORY.sort((a, b) => { return a.size < b.size });
+      return this.HISTORY.sort(function (a, b) { return a.size <= b.size });
     },
     MAX_STAVKA: function () {
       return this.HISTORY.reduce((a, b) => {
@@ -113,36 +120,36 @@ export default {
       return this.MAX_STAVKA + Number(this.INFO.stepStavka);
     },
 
-    USER_NAME: function () { 
-    return this.USERS.find(e => {
-         return e.id == this.INFO.idUser;
-    }).name;
-},
+    USER_NAME: function () {
+      return this.USERS.find(e => {
+        return e.id == this.INFO.idUser;
+      }).name;
+    },
 
     OUT_DATE: function () {
-  let time = Number(this.INFO.timeEnd) - new Date();
-  if(time < 0 || isNaN(time)){  return "Завершен"; }
+      let time = Number(this.INFO.timeEnd) - new Date();
+      if (time < 0 || isNaN(time)) { return "Завершен"; }
 
-  var delta = time / 1000;
-  var days = Math.floor(delta / 86400);
-  delta -= days * 86400;
-  var hours = Math.floor(delta / 3600) % 24;
-  delta -= hours * 3600;
-  var minutes = Math.floor(delta / 60) % 60;
-  delta -= minutes * 60;
-  var seconds = Math.floor(delta) % 60;
+      var delta = time / 1000;
+      var days = Math.floor(delta / 86400);
+      delta -= days * 86400;
+      var hours = Math.floor(delta / 3600) % 24;
+      delta -= hours * 3600;
+      var minutes = Math.floor(delta / 60) % 60;
+      delta -= minutes * 60;
+      var seconds = Math.floor(delta) % 60;
 
-  var result = "";
+      var result = "";
 
-  if(days > 0) result = result + " " + days + " д.";
-  if(hours > 0) result = result + " " + hours + " ч."; 
-  if(minutes > 0) result = result + " " + minutes + " м.";
-  if(seconds > 0) result = result + " " + seconds + " с.";
+      if (days > 0) result = result + " " + days + " д.";
+      if (hours > 0) result = result + " " + hours + " ч.";
+      if (minutes > 0) result = result + " " + minutes + " м.";
+      if (seconds > 0) result = result + " " + seconds + " с.";
 
 
-  return result;
-},
-    ...mapGetters('users', ['USER','USERS']),
+      return result;
+    },
+    ...mapGetters('users', ['USER', 'USERS']),
   },
   methods: {
     ...mapActions('users', ['getUserByID']),
@@ -163,7 +170,7 @@ export default {
         size: this.stavka
       }).then((result) => {
 
-        if(result != true){
+        if (result != true) {
           this.errors = ['Ошибка: некорректный ввод данных, ставка отменена'];
         }
 

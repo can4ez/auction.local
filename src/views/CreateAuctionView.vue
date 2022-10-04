@@ -108,16 +108,20 @@ export default {
     },
     doCreate: function (){
       
+      console.log("1");
+
       if(this.size_min < 0 || !this.isNumber(this.size_min)){
         this.errors = true;
         return;
       }
+      console.log("2");
       
       if(this.size_step < 0 || !this.isNumber(this.size_step)){
         this.errors = true;
         return;
       }
 
+      console.log("3");
       let data = {
         name: this.name,
         idUser: this.USER().id,
@@ -128,16 +132,17 @@ export default {
         stepStavka: this.size_step,
         description: this.description
       };
+      console.dir(data);
 
       this.auctionAdd(data).then((response)=>{
 
-        if(response != true){
+        if(response == false){
           this.errors = true;
           return;
         }
-
+        
         this.auctionList().then(()=>{
-          this.$router.push({ name: 'home' })
+            this.$router.push({ name: 'auction', query: { id: response.data.auctionInfo.id } })
         });        
       });
     }

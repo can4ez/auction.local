@@ -3,7 +3,7 @@
         <div class="card is-rounded">
             <div class="card-content  p-0">
                 <div class="content" style="margin-bottom: -1rem; height: 22rem;">
-                    <img :src="INFO.image" alt="" style="max-height: 25rem;width: 100%;object-fit: cover;">
+                    <img :src="INFO.image" alt="" class="card__img" style="">
                 </div>
             </div>
             <div class="card-footer has-background-info-light">
@@ -92,7 +92,12 @@ USER_NAME: function () {
 </script>
     
 <style lang='scss' scoped>
-
+.card__img{
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
     .card {
       box-shadow: none;
       border-radius: 1rem;
